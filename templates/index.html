@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uniswap Score - Multiple Pools</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.17/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Uniswap Score</h1>
+
+        <section aria-label="User Preferences">
+            <form id="multi-pool-form">
+                <ul id="risk_preference" class="filter-switch inline-flex items-center relative h-10 p-1 space-x-1 rounded-md font-semibold text-blue-600 my-4">
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" name="risk_preference" id="greed" value="Greed" class="sr-only" checked>
+                        <label for="greed" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        Greed
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" name="risk_preference" id="risk_loving" value="Risk_loving" class="sr-only">
+                        <label for="risk_loving" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        Risk-loving
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" name="risk_preference" id="neutral" value="Neutral" class="sr-only">
+                        <label for="neutral" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        Neutral
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" name="risk_preference" id="risk_averse" value="Risk_averse" class="sr-only">
+                        <label for="risk_averse" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        Risk-averse
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" name="risk_preference" id="pussy" value="Pussy" class="sr-only">
+                        <label for="pussy" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        Pussy
+                        </label>
+                    </li>
+                </ul>
+                
+                <ul id="time_horizon_group" class="filter-switch inline-flex items-center relative h-10 p-1 space-x-1 rounded-md font-semibold text-blue-600 my-4">
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="1d" name="time_horizon" value="1" class="sr-only">
+                        <label for="1d" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        1 day
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="7d" name="time_horizon" value="7" class="sr-only">
+                        <label for="7d" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        7 days
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="14d" name="time_horizon" value="14" class="sr-only">
+                        <label for="14d" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        14 days
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="30d" name="time_horizon" value="30" class="sr-only">
+                        <label for="30d" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        30 days
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="90d" name="time_horizon" value="90" class="sr-only">
+                        <label for="90d" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        90 days
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="180d" name="time_horizon" value="180" class="sr-only">
+                        <label for="180d" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        180 days
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="1y" name="time_horizon" value="360" class="sr-only">
+                        <label for="1y" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        1 year
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                        <input type="radio" id="2y" name="time_horizon" value="720" class="sr-only">
+                        <label for="2y" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        2 years
+                        </label>
+                    </li>
+                    <li class="filter-switch-item flex relative h-8 bg-gray-300x">
+                    <input type="radio" id="all" name="time_horizon" value="all" class="sr-only" checked>
+                    <label for="all" class="h-8 py-1 px-2 text-sm leading-6 text-gray-600 hover:text-gray-800 bg-white rounded shadow">
+                        All time
+                    </label>
+                    </li>
+                </ul>
+            </form>
+        </section>
+        
+        <section aria-label="Notifications">
+            <div id="error" class="alert alert-danger" role="alert" style="display: none;">
+                Error message here
+            </div>
+
+            <div id="loading" style="display: none;">
+                <p>Loading...</p>
+            </div>
+        </section>
+
+        <section aria-label="Results">
+            <div class="result">
+                <table id="multi-pool-table">
+                    <thead>
+                        <tr>
+                            <th>Pair</th>
+                            <th id="total-liquidity">Total Liquidity</th>
+                            <th id="current-volume">Current Volume</th>
+                            <th id="volume-reserve">Volume/Reserve</th>
+                            <th id="return-percentage">LP vs Holding</th>
+                            <th id="risk-score">Risk Score</th>
+                        </tr>
+                    </thead>
+                    <tbody> <!-- data rows will go here --> </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+{% with scripts_url = url_for('static', filename='scripts.js') %}
+<script src="{{ scripts_url }}"></script>
+{% endwith %}
+</body>
+</html>
